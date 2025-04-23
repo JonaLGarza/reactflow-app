@@ -1,35 +1,62 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import viteLogo from '/vite.svg'
-import './App.css'
+import ReactDOM from "react-dom/client";
+import ReactFlow, {
+  Background,
+  Connection,
+  Controls,
+  MiniMap,
+  ReactFlowProvider,
+  addEdge,
+  useEdgesState,
+  useNodesState,
+} from "reactflow";
+import "reactflow/dist/style.css";
 
-function App() {
-  const [count, setCount] = useState(0)
+const initialNodes = [
+  {
+    id: "1",
+    type: "default",
+    data: { label: "Start Node" },
+    position: { x: 250, y: 5 },
+  },
+];
+
+const initialEdges: Edge[] = [];
+
+function FlowCanvas() {
+
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [nodes, setNodes, onNodesChange] = useNodesState(initialNodes);
+  const [edges, setEdges, onEdgesChange] = useEdgesState(initialEdges);
+
+  const onConnect = (params: Connection) => setEdges((eds) => addEdge(params, eds));
 
   return (
-    <>
-      <div>
-        <a href="https://vite.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
-  )
+    <div style={{ width: "100vw", height: "100vh" }}>
+      <ReactFlow
+        nodes={nodes}
+        edges={edges}
+        onNodesChange={onNodesChange}
+        onEdgesChange={onEdgesChange}
+        onConnect={onConnect}
+        fitView
+      >
+        <MiniMap />
+        <Controls />
+        <Background color="#aaa" gap={16} />
+      </ReactFlow>
+    </div>
+  );
 }
 
-export default App
+export default function App() {
+  return (
+    <ReactFlowProvider>
+      <FlowCanvas />
+    </ReactFlowProvider>
+  );
+}
+
+const root = ReactDOM.createRoot(
+  document.getElementById("root") as HTMLElement
+);
+root.render(<App />);
