@@ -1,13 +1,13 @@
 import { memo } from "react";
 import { Handle, Position } from "reactflow";
 
-interface NodeData {
+interface ICustomLogicNodeData {
   label?: string;
   condition?: string;
   value?: string;
 }
 
-const CustomLogicNode = memo(({ data }: { data: NodeData }) => {
+const CustomLogicNode = memo(({ data }: { data: ICustomLogicNodeData }) => {
   return (
     <div style={{ padding: 10, border: '2px solid #0d9488', borderRadius: 8, background: '#ecfdf5' }}>
       <Handle type="target" position={Position.Top} />
