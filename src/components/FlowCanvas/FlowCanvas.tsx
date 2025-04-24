@@ -8,11 +8,15 @@ import ReactFlow, {
 import useFlowData from "../hooks/useFlowData";
 import { generateNode } from "../utils/nodeHelpers";
 import { nodeTypes } from "../../nodeTypes";
+import { useState } from "react";
 
 function FlowCanvas() {
   const { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange } = useFlowData();
+  const [showJson, setShowJson] = useState(false);
 
   const onConnect = (params: Connection) => setEdges((eds) => addEdge(params, eds));
+
+  const togglePreview = () => setShowJson(!showJson);
 
   const addNewNode = (type = "custom") => {
     setNodes((nds) => [...nds, generateNode(nds.length, type)]);
@@ -58,6 +62,17 @@ function FlowCanvas() {
           <input type="file" accept="application/json" onChange={loadFlow} style={{ display: "none" }} />
           <span style={{ cursor: "pointer", textDecoration: "underline" }}>Load Flow</span>
         </label>
+        <button onClick={togglePreview} style={{ marginLeft: 10 }}>
+          {showJson ? "Hide" : "Show"} JSON
+        </button>
+        {showJson && (
+          <div style={{ width: 400, padding: 10, background: "#f8fafc", borderLeft: "1px solid #ccc", overflow: "auto" }}>
+            <h4>Flow Preview</h4>
+            <pre style={{ fontSize: 12 }}>
+              {JSON.stringify({ nodes, edges }, null, 2)}
+            </pre>
+          </div>
+        )}
       </div>
       <ReactFlow
         nodes={nodes}
