@@ -9,9 +9,7 @@ import ReactFlow, {
 } from "reactflow";
 import useFlowData from "../hooks/useFlowData";
 import { generateNode } from "../utils/nodeHelpers";
-import CustomLogicNode from "../CustomLogicNode/CustomLogicNode";
-
-const nodeTypes = { custom: CustomLogicNode };
+import { nodeTypes } from "../../nodeTypes";
 
 function FlowCanvas() {
   const { nodes, setNodes, onNodesChange, edges, setEdges, onEdgesChange } = useFlowData();
